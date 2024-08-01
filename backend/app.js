@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const userRouter = require("./routes/userRoutes");
+const questionRouter = require("./routes/questionRoutes");
 const { createTables, getConnection } = require("./dataBase/dataBase");
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(
 );
 
 app.use("/api/user", userRouter);
+app.use("/api/question", questionRouter); // Changed endpoint to avoid conflict
 
 const port = 2000;
 

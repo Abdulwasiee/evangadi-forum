@@ -1,7 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { getConnection } = require("../dataBase/dataBase");
-const JWT_SECRET= import.meta.env.VITE_SECRET_KEY;
+require("dotenv").config();
+
+const JWT_SECRET = process.env.SECRET_KEY;
 
 const register = async (req, res) => {
   const { username, email, firstname, lastname, password } = req.body;
@@ -51,7 +53,6 @@ const signIn = async (req, res) => {
   }
 
   try {
-    // Check if the user exists
     const [rows] = await getConnection().query(
       "SELECT id, email, password FROM user WHERE username = ?",
       [username]
@@ -62,20 +63,15 @@ const signIn = async (req, res) => {
     }
 
     const user = rows[0];
-
-    // Verify the password
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return res.status(400).json({ msg: "Invalid username or password" });
     }
 
-    // Generate a JWT token
-    const token = jwt.sign(
-      { id: user.id, username: username },
-      JWT_SECRET,
-      { expiresIn: "1d" } // Token expires in 1 day
-    );
+    const token = jwt.sign({ id: user.id, username }, JWT_SECRET, {
+      expiresIn: "1d",
+    });
 
     res.status(200).json({ msg: "Sign in successful", token });
   } catch (error) {
@@ -85,8 +81,10 @@ const signIn = async (req, res) => {
 };
 
 const checkUser = async (req, res) => {
-  res.send("Checking endpoint");
-  // Add checking logic here
+  const { username, id } = req.user;
+  res
+    .status(200)
+    .json({ msg: "User is authenticated", user: { username, id } });
 };
 
 module.exports = { register, signIn, checkUser };
