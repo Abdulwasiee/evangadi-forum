@@ -1,5 +1,6 @@
 const { getConnection } = require("../dataBase/dataBase");
 
+// Post a question
 const postQuestion = async (req, res) => {
   const { description, title, tag } = req.body;
   const userId = req.user.id; // Assuming the user is authenticated and user ID is available
@@ -21,7 +22,9 @@ const postQuestion = async (req, res) => {
       userId,
     ]);
 
-    res.status(201).json({ msg: "Question posted successfully" });
+    res
+      .status(201)
+      .json({ msg: "Question posted successfully", questionid: questionId });
   } catch (error) {
     console.error("Error posting question:", error.message);
     res.status(500).json({ msg: "Server error" });

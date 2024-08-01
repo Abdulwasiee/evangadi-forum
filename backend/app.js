@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const userRouter = require("./routes/userRoutes");
 const questionRouter = require("./routes/questionRoutes");
+const answerRouter = require("./routes/answerRoute");
 const { createTables, getConnection } = require("./dataBase/dataBase");
 
 const app = express();
@@ -15,7 +16,8 @@ app.use(
 );
 
 app.use("/api/user", userRouter);
-app.use("/api/question", questionRouter); 
+app.use("/api/question", questionRouter);
+app.use("/api/answer", answerRouter); // Add route for answers
 
 const port = 2000;
 

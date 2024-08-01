@@ -35,12 +35,13 @@ const createTables = async () => {
   )`;
 
   const answerTable = `CREATE TABLE IF NOT EXISTS answer (
-      id VARCHAR(100) NOT NULL PRIMARY KEY,
-      questionid VARCHAR(100) NOT NULL,
-      user_id INT NOT NULL,
-      answer TEXT NOT NULL,
-      FOREIGN KEY (questionid) REFERENCES question(questionid),
-      FOREIGN KEY (user_id) REFERENCES user(id)
+    id VARCHAR(100) NOT NULL,
+    questionid VARCHAR(100) NOT NULL,
+    user_id INT NOT NULL,
+    answer TEXT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (questionid) REFERENCES question(questionid),
+    FOREIGN KEY (user_id) REFERENCES user(id)
   )`;
 
   try {

@@ -54,7 +54,7 @@ const signIn = async (req, res) => {
 
   try {
     const [rows] = await getConnection().query(
-      "SELECT id, email, password FROM user WHERE username = ?",
+      "SELECT id, password FROM user WHERE username = ?",
       [username]
     );
 
