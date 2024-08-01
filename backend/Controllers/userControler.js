@@ -38,7 +38,7 @@ const register = async (req, res) => {
       hashedPassword,
     ]);
 
-    res.status(201).json({ msg: "User registered successfully" });
+    res.status(201).json({ msg: " registered successfully" });
   } catch (error) {
     console.error("Error inserting user:", error.message);
     res.status(500).json({ msg: "Server error" });
@@ -70,7 +70,7 @@ const signIn = async (req, res) => {
     }
 
     const token = jwt.sign({ id: user.id, username }, JWT_SECRET, {
-      expiresIn: "1d",
+      expiresIn: "1h",
     });
 
     res.status(200).json({ msg: "Sign in successful", token });
