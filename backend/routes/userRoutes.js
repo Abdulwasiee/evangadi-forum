@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authMiddleWare=require('../middlewire/auth')
-const { register, signIn, checkUser } = require("../Controller/controler");
+const { register, signIn, checkUser } = require("../Controllers/userControler");
 
 // Define routes and map them to their handlers
 router.post("/register", register);

@@ -1,7 +1,7 @@
 const { getConnection } = require("../dataBase/dataBase");
 
 const postQuestion = async (req, res) => {
-  const { description, title } = req.body;
+  const { description, title, tag } = req.body;
   const userId = req.user.id; // Assuming the user is authenticated and user ID is available
 
   if (!description || !title) {
@@ -10,11 +10,14 @@ const postQuestion = async (req, res) => {
 
   try {
     const questionId = `Q${Date.now()}`; // Simple unique ID generation using current time
-    const insertQuestionQuery = `INSERT INTO question (questionid, title, description, user_id) VALUES (?, ?, ?, ?)`;
+    const insertQuestionQuery = `
+      INSERT INTO question (questionid, title, description, tag, user_id) 
+      VALUES (?, ?, ?, ?, ?)`;
     await getConnection().query(insertQuestionQuery, [
       questionId,
       title,
       description,
+      tag || null, // Use null if tag is not provided
       userId,
     ]);
 
