@@ -3,6 +3,6 @@ const router = express.Router();
 const { postQuestion } = require("../Controllers/questionController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
-router.post("/", authMiddleware, postQuestion); // Protected route
+router.post("/", authMiddleware, postQuestion); 
 
 module.exports = router;

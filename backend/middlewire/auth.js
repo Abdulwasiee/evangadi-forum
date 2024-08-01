@@ -1,25 +1,22 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+
 const JWT_SECRET = process.env.SECRET_KEY;
 
-async function authMiddleWire(req, res, next) {
-  const authHeader = req.headers.authorization;
+const authMiddleware = async (req, res, next) => {
+  const token = req.headers["authorization"];
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ msg: "Authentication invali" });
+  if (!token) {
+    return res.status(401).json({ msg: "No token provided" });
   }
 
   try {
-   
-    const token = authHeader.split(" ")[1];
-    // Verify the token
-    const {username,id} = jwt.verify(token, JWT_SECRET);
-    req.user = {username,id};
-
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
     next();
   } catch (err) {
-    return res.status(401).json({ msg: "Authentication invalid" });
+    res.status(401).json({ msg: "Invalid token" });
   }
-}
+};
 
-module.exports = authMiddleWire;
+module.exports = authMiddleware;

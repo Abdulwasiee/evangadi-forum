@@ -9,7 +9,7 @@ const postQuestion = async (req, res) => {
   }
 
   try {
-    const questionId = `Q${Date.now()}`; // Simple unique ID generation
+    const questionId = `Q${Date.now()}`; // Simple unique ID generation using current time
     const insertQuestionQuery = `INSERT INTO question (questionid, title, description, user_id) VALUES (?, ?, ?, ?)`;
     await getConnection().query(insertQuestionQuery, [
       questionId,

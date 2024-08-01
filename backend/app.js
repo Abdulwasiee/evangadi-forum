@@ -15,7 +15,7 @@ app.use(
 );
 
 app.use("/api/user", userRouter);
-app.use("/api/question", questionRouter); // Changed endpoint to avoid conflict
+app.use("/api/question", questionRouter); 
 
 const port = 2000;
 
