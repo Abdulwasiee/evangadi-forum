@@ -22,13 +22,36 @@ const postQuestion = async (req, res) => {
       userId,
     ]);
 
-    res
-      .status(201)
-      .json({ msg: "Question posted successfully", questionid: questionId });
+    res.status(201).json({
+      msg: "Question posted successfully",
+      questionid: questionId,
+    });
   } catch (error) {
     console.error("Error posting question:", error.message);
-    res.status(500).json({ msg: "Server error" });
+    res.status(500).json({
+      msg: "Server error",
+      error: error.message, // Provide more detail for debugging
+    });
   }
 };
 
-module.exports = { postQuestion };
+// Get all questions
+const getAllQuestions = async (req, res) => {
+  try {
+    const query = "SELECT * FROM question";
+    const [rows] = await getConnection().query(query);
+
+    res.status(200).json({
+      msg: "Questions fetched successfully",
+      questions: rows,
+    });
+  } catch (error) {
+    console.error("Error fetching questions:", error.message);
+    res.status(500).json({
+      msg: "Server error",
+      error: error.message, // Provide more detail for debugging
+    });
+  }
+};
+
+module.exports = { postQuestion, getAllQuestions };

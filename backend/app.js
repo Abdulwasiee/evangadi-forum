@@ -21,7 +21,7 @@ app.use(
 
 app.use("/api/user", userRouter);
 app.use("/api/question", questionRouter);
-app.use("/api/answer", answerRouter); // Add route for answers
+app.use("/api/answer", answerRouter); 
 
 const port = 2000;
 
