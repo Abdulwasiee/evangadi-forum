@@ -34,6 +34,7 @@ const Header = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
   };
+  console.log(isAuthenticated)
 
   return (
     <header className="header-container">
