@@ -21,7 +21,8 @@ const createTables = async () => {
       email VARCHAR(100) NOT NULL UNIQUE,
       firstname VARCHAR(50) NOT NULL,
       lastname VARCHAR(50) NOT NULL,
-      password VARCHAR(255) NOT NULL
+      password VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   )`;
 
   const questionTable = `CREATE TABLE IF NOT EXISTS question (
@@ -31,6 +32,7 @@ const createTables = async () => {
       description TEXT NOT NULL,
       tag VARCHAR(50),
       user_id INT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES user(id)
   )`;
 
@@ -39,15 +41,17 @@ const createTables = async () => {
     questionid VARCHAR(100) NOT NULL,
     user_id INT NOT NULL,
     answer TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (questionid) REFERENCES question(questionid),
     FOREIGN KEY (user_id) REFERENCES user(id)
   )`;
 
   try {
-    await getConnection().query(userTable);
-    await getConnection().query(questionTable);
-    await getConnection().query(answerTable);
+    const connection = getConnection();
+    await connection.query(userTable);
+    await connection.query(questionTable);
+    await connection.query(answerTable);
     console.log("All tables created or already exist");
   } catch (err) {
     console.error("Error creating tables:", err.message);

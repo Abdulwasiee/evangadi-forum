@@ -3,8 +3,8 @@ const { getConnection } = require("../dataBase/dataBase");
 // Post an answer to a specific question
 const postAnswer = async (req, res) => {
   const { questionid, answer } = req.body;
-  const userId = req.user.id; 
-  console.log(user)// Assuming the user is authenticated and user ID is available
+  const userId = req.user.id;
+  console.log(userId); // Assuming the user is authenticated and user ID is available
 
   if (!questionid || !answer) {
     return res.status(400).json({ msg: "Question ID and answer are required" });
@@ -40,7 +40,6 @@ const postAnswer = async (req, res) => {
 };
 
 // Get all answers for a specific question
-
 const getAnswersForQuestion = async (req, res) => {
   const { questionid } = req.params;
 
@@ -66,11 +65,13 @@ const getAnswersForQuestion = async (req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 };
+
+// Get a single answer by ID
 const getAnswersSingleForQuestion = async (req, res) => {
   const { answerid } = req.params;
 
   if (!answerid) {
-    return res.status(400).json({ msg: "Question ID is required" });
+    return res.status(400).json({ msg: "Answer ID is required" });
   }
 
   try {
@@ -80,17 +81,16 @@ const getAnswersSingleForQuestion = async (req, res) => {
     );
 
     if (rows.length === 0) {
-      return res
-        .status(404)
-        .json({ msg: "No answers found for this question" });
+      return res.status(404).json({ msg: "No answers found with this ID" });
     }
 
-    res.status(200).json({ answers: rows });
+    res.status(200).json({ answer: rows[0] });
   } catch (error) {
-    console.error("Error retrieving answers:", error.message);
+    console.error("Error retrieving answer:", error.message);
     res.status(500).json({ msg: "Server error" });
   }
 };
+
 module.exports = {
   postAnswer,
   getAnswersForQuestion,
