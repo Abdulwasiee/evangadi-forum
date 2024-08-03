@@ -1,0 +1,78 @@
+.footer-container {
+  width: 100%;
+  background-color: #333; /* Dark background color */
+  color: #fff; /* White text color */
+  padding: 20px 0; /* Padding for top and bottom */
+}
+
+.all-container {
+  width: 80%; /* Adjust the width as needed */
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.media-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-container {
+  margin-bottom: 10px;
+}
+
+.footer-logo {
+  width: 150px; /* Adjust logo size as needed */
+}
+
+.icon-container {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.icon-container li {
+  margin: 0 10px; /* Spacing between icons */
+}
+
+.social-icon {
+  font-size: 24px; /* Adjust icon size as needed */
+  color: #fff; /* Icon color */
+  transition: color 0.3s ease;
+}
+
+.social-icon:hover {
+  color: #f0f0f0; /* Change color on hover */
+}
+
+.links, .contact {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.links ul, .contact ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.links li, .contact li {
+  margin-bottom: 5px;
+}
+
+.links a, .contact a {
+  color: #fff; /* Text color */
+  text-decoration: none;
+}
+
+.links a:hover, .contact a:hover {
+  text-decoration: underline; /* Underline on hover */
+}

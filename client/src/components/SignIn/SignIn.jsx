@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { AuthContext } from "../Auth/Auth";
 import "./SignIn.css";
 
 const SignIn = () => {
@@ -8,17 +9,16 @@ const SignIn = () => {
     password: "",
   });
 
-  const [error, setError] = useState(""); 
-  const [message, setMessage] = useState(""); 
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useContext(AuthContext);
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -31,16 +31,17 @@ const SignIn = () => {
       const result = await response.json();
 
       if (response.ok) {
-        setMessage(result.msg); 
-        setError(""); 
-        setFormData({ username: "", password: "" }); 
+        setMessage(result.msg);
+        setError("");
+        setFormData({ username: "", password: "" });
+        login(); 
       } else {
-        setError(result.message || "Sign-in failed."); 
-        setMessage(""); 
+        setError(result.message || "Sign-in failed.");
+        setMessage("");
       }
     } catch (error) {
-      setError("Error during sign-in. Please try again."); 
-      setMessage(""); 
+      setError("Error during sign-in. Please try again.");
+      setMessage("");
     }
   };
 
