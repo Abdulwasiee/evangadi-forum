@@ -1,0 +1,84 @@
+.questions-container {
+  padding: 20px;
+  min-height: 75vh;
+  background-color: #f9f9f9; /* Light background for better contrast */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ask {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ask a {
+  color: white;
+  text-decoration: none;
+}
+
+.ask:hover {
+  background-color: #0056b3;
+}
+
+.user-name {
+  font-size: 16px;
+  color: #333;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.questions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-bar {
+  margin-bottom: 20px;
+  position: relative;
+  width: 50%;
+  margin: 20px auto ;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px 20px;
+  border: 1px solid #ccc;
+  border-radius: 25px; /* Rounded corners */
+  font-size: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-bar input:focus {
+  border-color: #007bff;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2); /* Focus shadow */
+}
+
+.search-bar input::placeholder {
+  color: #aaa;
+}
+
+.search-bar::after {
+  content: "\1F50D"; /* Magnifying glass icon */
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #007bff;
+}

@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { AuthContext } from "../Auth/Auth";
+
 import "./SignIn.css";
+import { Link } from "react-router-dom";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +13,7 @@ const SignIn = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useContext(AuthContext);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,7 +35,7 @@ const SignIn = () => {
         setMessage(result.msg);
         setError("");
         setFormData({ username: "", password: "" });
-        login(); 
+      
       } else {
         setError(result.message || "Sign-in failed.");
         setMessage("");
@@ -85,7 +86,7 @@ const SignIn = () => {
         {message && <p className="success-message">{message}</p>}
       </form>
       <p className="signup-link">
-        Don't have an account? <a href="/register">Register here</a>
+        Don't have an account? <Link to="/register">Register here</Link>
       </p>
     </div>
   );

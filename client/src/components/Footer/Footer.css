@@ -1,12 +1,14 @@
 .footer-container {
   width: 100%;
-  background-color: #333; /* Dark background color */
-  color: #fff; /* White text color */
-  padding: 20px 0; /* Padding for top and bottom */
+  background-color: #333;
+  color: #fff; 
+  padding: 20px 0; 
+  bottom: 0;
+ 
 }
 
 .all-container {
-  width: 80%; /* Adjust the width as needed */
+  width: 80%; 
   margin: auto;
   display: flex;
   justify-content: space-between;
@@ -24,7 +26,7 @@
 }
 
 .footer-logo {
-  width: 150px; /* Adjust logo size as needed */
+  width: 150px; 
 }
 
 .icon-container {
@@ -35,17 +37,17 @@
 }
 
 .icon-container li {
-  margin: 0 10px; /* Spacing between icons */
+  margin: 0 10px; 
 }
 
 .social-icon {
-  font-size: 24px; /* Adjust icon size as needed */
-  color: #fff; /* Icon color */
+  font-size: 24px; 
+  color: #fff; 
   transition: color 0.3s ease;
 }
 
 .social-icon:hover {
-  color: #f0f0f0; /* Change color on hover */
+  color: #f0f0f0; 
 }
 
 .links, .contact {
@@ -69,10 +71,10 @@
 }
 
 .links a, .contact a {
-  color: #fff; /* Text color */
+  color: #fff; 
   text-decoration: none;
 }
 
 .links a:hover, .contact a:hover {
-  text-decoration: underline; /* Underline on hover */
+  text-decoration: underline; 
 }

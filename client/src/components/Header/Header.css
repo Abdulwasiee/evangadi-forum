@@ -6,6 +6,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .nav-container {
@@ -15,14 +18,14 @@
   width: 60%;
   margin: auto;
 }
-.menu{
-    flex: 2;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.menu {
+  flex: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.logo{
-    flex: 4;
+.logo {
+  flex: 4;
 }
 .list-container {
   list-style: none;
