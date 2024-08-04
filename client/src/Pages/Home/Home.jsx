@@ -3,6 +3,7 @@ import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import Question from "../../components/QuestionList/Question";
 import { Link } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa"; // Import the welcome icon
 import "./Home.css"; // Import CSS file
 
 function Home() {
@@ -18,7 +19,7 @@ function Home() {
           "http://localhost:2000/api/question/get"
         );
         setQuestions(response.data.questions);
-        setFilteredQuestions(response.data.questions); // Initialize filteredQuestions
+        setFilteredQuestions(response.data.questions);
       } catch (err) {
         setError("Failed to fetch questions");
         console.error("Error fetching questions:", err);
@@ -51,7 +52,10 @@ function Home() {
           <button className="ask">
             <Link to="postQuestion">Ask Question</Link>
           </button>
-          <div className="user-name">Welcome: User Name</div>
+          <div className="user-welcome">
+            <FaUserCircle className="welcome-icon" />
+            <span className="user-name">Welcome, User Name</span>
+          </div>
         </section>
         <h2>Questions</h2>
         <section className="search-bar">

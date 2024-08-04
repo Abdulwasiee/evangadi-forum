@@ -1,8 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 
 import "./SignIn.css";
-import { Link } from "react-router-dom";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +14,7 @@ const SignIn = () => {
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,7 +36,9 @@ const SignIn = () => {
         setMessage(result.msg);
         setError("");
         setFormData({ username: "", password: "" });
-      
+
+       
+        navigate("/home");
       } else {
         setError(result.message || "Sign-in failed.");
         setMessage("");

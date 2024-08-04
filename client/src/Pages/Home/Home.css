@@ -9,6 +9,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  position: sticky;
+  top: 0;
 }
 
 .ask {
@@ -28,6 +30,17 @@
 
 .ask:hover {
   background-color: #0056b3;
+}
+
+.user-welcome {
+  display: flex;
+  align-items: center;
+}
+
+.welcome-icon {
+  font-size: 24px; /* Adjust size as needed */
+  color: #007bff;
+  margin-right: 8px; /* Space between icon and text */
 }
 
 .user-name {
@@ -50,7 +63,7 @@
   margin-bottom: 20px;
   position: relative;
   width: 50%;
-  margin: 20px auto ;
+  margin: 20px auto;
 }
 
 .search-bar input {

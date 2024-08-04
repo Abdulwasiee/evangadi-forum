@@ -14,6 +14,7 @@ function Landing() {
           <div className="authentication-container">
             <Routes>
               <Route path="/register" element={<Register />} />
+              <Route path="/" element={<Register />} />
               <Route path="/signIn" element={<SignIn />} />
             </Routes>
           </div>
