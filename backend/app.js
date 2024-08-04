@@ -27,11 +27,11 @@ const port = 2000;
 
 const start = async () => {
   try {
-    // Test the connection
+ 
     const [rows] = await getConnection().query('SELECT "test"');
     console.log("Database connection established:", rows);
 
-    // Create tables
+ 
     await createTables();
 
     app.listen(port, () => {
