@@ -24,7 +24,7 @@ const register = async (req, res) => {
     if (rows.length > 0) {
       return res.status(409).json({
         error: "Conflict",
-        msg: "User already existed",
+        msg: "User already exists",
       });
     }
 
@@ -45,12 +45,12 @@ const register = async (req, res) => {
       hashedPassword,
     ]);
 
-    res.status(201).json({ msg: " User registered successfully" });
+    res.status(201).json({ msg: "User registered successfully" });
   } catch (error) {
     console.error("Error inserting user:", error.message);
     res.status(500).json({
       error: "Internal Server Error",
-      message: "An unexpected error occurred.",
+      msg: "An unexpected error occurred.",
     });
   }
 };
@@ -61,7 +61,7 @@ const signIn = async (req, res) => {
   if (!username || !password) {
     return res.status(400).json({
       error: "Bad Request",
-      message: "Please provide all required fields",
+      msg: "Please provide all required fields",
     });
   }
 
@@ -74,7 +74,7 @@ const signIn = async (req, res) => {
     if (rows.length === 0) {
       return res.status(400).json({
         error: "Unauthorized",
-        message: "Invalid username or password",
+        msg: "Invalid username or password",
       });
     }
 

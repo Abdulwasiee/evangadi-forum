@@ -10,28 +10,27 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// CORS configuration
 app.use(
   cors({
-    origin: "http://localhost:5173", 
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Authorization"], 
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-
+// Route setup
 app.use("/api/user", userRouter);
 app.use("/api/question", questionRouter);
-app.use("/api/answer", answerRouter); 
+app.use("/api/answer", answerRouter);
 
 const port = 2000;
 
 const start = async () => {
   try {
- 
     const [rows] = await getConnection().query('SELECT "test"');
     console.log("Database connection established:", rows);
 
- 
     await createTables();
 
     app.listen(port, () => {
