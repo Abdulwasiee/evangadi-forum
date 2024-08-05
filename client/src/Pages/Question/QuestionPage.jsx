@@ -1,16 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import { FaArrowRight } from "react-icons/fa";
-import { AuthContext } from "../../components/Auth/Auth";
 import "./Question.css";
 
 function QuestionPage() {
-  const { isAuthenticated } = useContext(AuthContext); // Use AuthContext to get authentication status
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
-  const [error, setError] = useState(""); // Added for error display
+  const [error, setError] = useState("");
 
   const handleAddTag = () => {
     if (tagInput && !tags.includes(tagInput)) {
@@ -19,55 +17,48 @@ function QuestionPage() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!isAuthenticated) {
-      console.error("User is not authenticated");
-      setError("User is not authenticated.");
+  try {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("No authentication token found");
+      setError("No authentication token found.");
       return;
     }
 
-    try {
-      const token = localStorage.getItem("authToken"); // Retrieve token from localStorage
-      if (!token) {
-        console.error("No authentication token found");
-        setError("No authentication token found.");
-        return;
-      }
+    console.log("Submitting question with token:", token);
 
-      const response = await fetch("http://localhost:2000/api/question/post", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token, // Include the token in the request headers
-        },
-        body: JSON.stringify({
-          title,
-          description,
-          tag: tags.join(", "), // Join tags with comma
-        }),
-      });
+    const response = await fetch("http://localhost:2000/api/question/post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`, // Ensure only one "Bearer"
+      },
+      body: JSON.stringify({
+        title,
+        description,
+        tag: tags.join(", "),
+      }),
+    });
 
-      const result = await response.json();
-      if (response.ok) {
-        // Handle success
-        console.log("Question posted successfully:", result);
-        // Clear form
-        setTitle("");
-        setDescription("");
-        setTags([]);
-        setError(""); // Clear error message
-      } else {
-        // Handle error
-        console.error("Failed to post question:", result.msg);
-        setError(result.msg || "Failed to post question.");
-      }
-    } catch (error) {
-      console.error("Error posting question:", error);
-      setError("Error posting question.");
+    const result = await response.json();
+    if (response.ok) {
+      console.log("Question posted successfully:", result);
+      setTitle("");
+      setDescription("");
+      setTags([]);
+      setError("");
+    } else {
+      console.error("Failed to post question:", result.msg);
+      setError(result.msg || "Failed to post question.");
     }
-  };
+  } catch (error) {
+    console.error("Error posting question:", error);
+    setError("Error posting question.");
+  }
+};
 
   return (
     <Layout>
@@ -134,8 +125,7 @@ function QuestionPage() {
               Submit Question
             </button>
           </form>
-          {error && <p className="error-message">{error}</p>}{" "}
-          {/* Display error message */}
+          {error && <p className="error-message">{error}</p>}
         </div>
       </section>
     </Layout>

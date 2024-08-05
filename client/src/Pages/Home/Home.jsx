@@ -51,7 +51,7 @@ function Home() {
             "http://localhost:2000/api/user/checkUser",
             {
               headers: {
-                Authorization: token, // Use Bearer prefix
+                Authorization: token,
               },
             }
           );
