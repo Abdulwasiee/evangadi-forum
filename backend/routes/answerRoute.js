@@ -12,6 +12,8 @@ router.post("/", authMiddleware, postAnswer); // Protected route
 
 // Route to get all answers for a specific question
 router.get("/:questionid", getAnswersForQuestion);
+
+// Route to get a single answer by ID
 router.get("/single/:answerid", getAnswersSingleForQuestion);
 
 module.exports = router;

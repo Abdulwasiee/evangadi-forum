@@ -1,4 +1,5 @@
-const { getConnection } = require("../dataBase/dataBase");
+// controllers/questionController.js
+const { getConnection } = require("../database/database");
 
 // Post a question
 const postQuestion = async (req, res) => {
@@ -16,7 +17,7 @@ const postQuestion = async (req, res) => {
     const insertQuestionQuery = `
       INSERT INTO question (questionid, title, description, tag, user_id, created_at) 
       VALUES (?, ?, ?, ?, ?, ?)`;
-    
+
     await getConnection().query(insertQuestionQuery, [
       questionId,
       title,
@@ -64,4 +65,39 @@ const getAllQuestions = async (req, res) => {
   }
 };
 
-module.exports = { postQuestion, getAllQuestions };
+// Get a specific question by ID
+const getQuestionById = async (req, res) => {
+  const { questionId } = req.params;
+
+  if (!questionId) {
+    return res.status(400).json({ msg: "Question ID is required" });
+  }
+
+  try {
+    const query = `
+      SELECT question.questionid, question.title, question.description, question.tag, question.created_at,
+             user.firstname, user.lastname
+      FROM question
+      JOIN user ON question.user_id = user.id
+      WHERE question.questionid = ?
+    `;
+    const [rows] = await getConnection().query(query, [questionId]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ msg: "Question not found" });
+    }
+
+    res.status(200).json({
+      msg: "Question fetched successfully",
+      question: rows[0],
+    });
+  } catch (error) {
+    console.error("Error fetching question:", error.message);
+    res.status(500).json({
+      msg: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+module.exports = { postQuestion, getAllQuestions, getQuestionById };
