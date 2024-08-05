@@ -1,9 +1,12 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../Auth/Auth"; // Adjust the path to your AuthContext file
 import logo from "../../assets/evangadi-logo-black.png";
 import "./Header.css";
 
 const Header = () => {
+  const { isAuthenticated, logout } = useContext(AuthContext);
+
   return (
     <header className="header-container">
       <section className="nav-container">
@@ -17,14 +20,15 @@ const Header = () => {
           <li>
             <Link to="/how-it-works">How it Works</Link>
           </li>
-
-          <li>
-            <button>Log Out</button>
-          </li>
-
-          <li>
-            <Link to="/signIn">Sign In</Link>
-          </li>
+          {isAuthenticated ? (
+            <li>
+              <button onClick={logout}>Log Out</button>
+            </li>
+          ) : (
+            <li>
+              <Link to="/signIn">Sign In</Link>
+            </li>
+          )}
         </ul>
       </section>
     </header>

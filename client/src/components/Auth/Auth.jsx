@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
@@ -12,7 +11,7 @@ export const AuthProvider = ({ children }) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token") || "",
+          Authorization: localStorage.getItem("authToken") || "",
         },
       });
       setIsAuthenticated(response.ok);
@@ -26,12 +25,13 @@ export const AuthProvider = ({ children }) => {
     checkAuthStatus();
   }, []);
 
-  const login = () => {
-    checkAuthStatus();
+  const login = async (token) => {
+    localStorage.setItem("authToken", `Bearer ${token}`);
+    await checkAuthStatus();
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("authToken");
     setIsAuthenticated(false);
   };
 

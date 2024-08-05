@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
-import { FaArrowRight } from "react-icons/fa"; // Import the arrow icon
-import "./Question.css"; // Import CSS file
+import { FaArrowRight } from "react-icons/fa";
+import { AuthContext } from "../../components/Auth/Auth";
+import "./Question.css";
 
 function QuestionPage() {
+  const { isAuthenticated } = useContext(AuthContext); // Use AuthContext to get authentication status
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
+  const [error, setError] = useState(""); // Added for error display
 
   const handleAddTag = () => {
     if (tagInput && !tags.includes(tagInput)) {
@@ -18,11 +21,26 @@ function QuestionPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!isAuthenticated) {
+      console.error("User is not authenticated");
+      setError("User is not authenticated.");
+      return;
+    }
+
     try {
+      const token = localStorage.getItem("authToken"); // Retrieve token from localStorage
+      if (!token) {
+        console.error("No authentication token found");
+        setError("No authentication token found.");
+        return;
+      }
+
       const response = await fetch("http://localhost:2000/api/question/post", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: token, // Include the token in the request headers
         },
         body: JSON.stringify({
           title,
@@ -39,12 +57,15 @@ function QuestionPage() {
         setTitle("");
         setDescription("");
         setTags([]);
+        setError(""); // Clear error message
       } else {
         // Handle error
         console.error("Failed to post question:", result.msg);
+        setError(result.msg || "Failed to post question.");
       }
     } catch (error) {
       console.error("Error posting question:", error);
+      setError("Error posting question.");
     }
   };
 
@@ -113,6 +134,8 @@ function QuestionPage() {
               Submit Question
             </button>
           </form>
+          {error && <p className="error-message">{error}</p>}{" "}
+          {/* Display error message */}
         </div>
       </section>
     </Layout>

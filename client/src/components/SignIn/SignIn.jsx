@@ -1,20 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-
+import { AuthContext } from "../Auth/Auth"; // Adjust the path to your AuthContext file
 import "./SignIn.css";
 
 const SignIn = () => {
+  const { login } = useContext(AuthContext); // Access login function from context
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
-
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,11 +32,12 @@ const SignIn = () => {
       const result = await response.json();
 
       if (response.ok) {
+        await login(result.token);
+
         setMessage(result.msg);
         setError("");
         setFormData({ username: "", password: "" });
 
-       
         navigate("/home");
       } else {
         setError(result.message || "Sign-in failed.");
