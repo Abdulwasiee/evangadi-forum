@@ -19,8 +19,14 @@ function Home() {
         const response = await axios.get(
           "http://localhost:2000/api/question/get"
         );
-        setQuestions(response.data.questions);
-        setFilteredQuestions(response.data.questions);
+
+        // Sort questions by created_at timestamp in descending order
+        const sortedQuestions = response.data.questions.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+
+        setQuestions(sortedQuestions);
+        setFilteredQuestions(sortedQuestions);
       } catch (err) {
         setError("Failed to fetch questions");
         console.error("Error fetching questions:", err);
@@ -51,7 +57,7 @@ function Home() {
             "http://localhost:2000/api/user/checkUser",
             {
               headers: {
-                Authorization: token,
+                Authorization: `${token}`,
               },
             }
           );
@@ -73,9 +79,9 @@ function Home() {
     <Layout>
       <div className="questions-container">
         <section className="header">
-          <button className="ask">
-            <Link to="postQuestion">Ask Question</Link>
-          </button>
+          <Link to="postQuestion">
+            <button className="ask">Ask Question</button>
+          </Link>
           <div className="user-welcome">
             <FaUserCircle className="welcome-icon" />
             <span className="user-name">
