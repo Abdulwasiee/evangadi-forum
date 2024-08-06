@@ -3,7 +3,7 @@ const cors = require("cors");
 const userRouter = require("./routes/userRoutes");
 const questionRouter = require("./routes/questionRoutes");
 const answerRouter = require("./routes/answerRoute");
-const { createTables, getConnection } = require('./dataBase/dataBase.js')
+const { createTables, getConnection } = require("./dataBase/dataBase.js");
 
 const app = express();
 

@@ -37,7 +37,7 @@ const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const insertUserQuery = `INSERT INTO user (username, email, firstname, lastname, password) VALUES (?, ?, ?, ?, ?)`;
-    await getConnection().query(insertUserQuery, [
+    const [result] = await getConnection().query(insertUserQuery, [
       username,
       email,
       firstname,
@@ -45,7 +45,14 @@ const register = async (req, res) => {
       hashedPassword,
     ]);
 
-    res.status(201).json({ msg: "User registered successfully" });
+    const token = jwt.sign({ id: result.insertId, username }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.status(201).json({
+      msg: "User registered successfully",
+      token,
+    });
   } catch (error) {
     console.error("Error inserting user:", error.message);
     res.status(500).json({

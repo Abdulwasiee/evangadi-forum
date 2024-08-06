@@ -1,18 +1,16 @@
-// controllers/questionController.js
-const { getConnection } = require("../database/database");
+const { getConnection } = require("../dataBase/dataBase");
 
-// Post a question
 const postQuestion = async (req, res) => {
   const { description, title, tag } = req.body;
-  const userId = req.user.id; // Assuming the user is authenticated and user ID is available
+  const userId = req.user.id;
 
   if (!description || !title) {
     return res.status(400).json({ msg: "Description and title are required" });
   }
 
   try {
-    const questionId = `Q${Date.now()}`; // Simple unique ID generation using current time
-    const currentTimestamp = new Date(); // Get the current timestamp
+    const questionId = `Q${Date.now()}`;
+    const currentTimestamp = new Date();
 
     const insertQuestionQuery = `
       INSERT INTO question (questionid, title, description, tag, user_id, created_at) 
@@ -22,26 +20,25 @@ const postQuestion = async (req, res) => {
       questionId,
       title,
       description,
-      tag || null, // Use null if tag is not provided
+      tag || null,
       userId,
-      currentTimestamp, // Insert the current timestamp
+      currentTimestamp,
     ]);
 
     res.status(201).json({
       msg: "Question posted successfully",
       questionid: questionId,
-      created_at: currentTimestamp, // Return the timestamp in the response
+      created_at: currentTimestamp,
     });
   } catch (error) {
     console.error("Error posting question:", error.message);
     res.status(500).json({
       msg: "Server error",
-      error: error.message, // Provide more detail for debugging
+      error: error.message,
     });
   }
 };
 
-// Get all questions
 const getAllQuestions = async (req, res) => {
   try {
     const query = `
@@ -65,13 +62,8 @@ const getAllQuestions = async (req, res) => {
   }
 };
 
-// Get a specific question by ID
 const getQuestionById = async (req, res) => {
-  const { questionId } = req.params;
-
-  if (!questionId) {
-    return res.status(400).json({ msg: "Question ID is required" });
-  }
+  const questionId = req.params.questionId;
 
   try {
     const query = `
@@ -84,7 +76,9 @@ const getQuestionById = async (req, res) => {
     const [rows] = await getConnection().query(query, [questionId]);
 
     if (rows.length === 0) {
-      return res.status(404).json({ msg: "Question not found" });
+      return res.status(404).json({
+        msg: "Question not found",
+      });
     }
 
     res.status(200).json({

@@ -1,101 +1,98 @@
-const { getConnection } = require("../database/database"); // Ensure correct path and function
+const { getConnection } = require("../dataBase/dataBase");
 
-// Post an answer
 const postAnswer = async (req, res) => {
-  const { questionid, answer } = req.body;
-  const userId = req.user.id; // Ensure user ID is available
+  const { answer, questionid } = req.body;
+  const userId = req.user.id;
 
-  if (!questionid || !answer) {
-    return res.status(400).json({ msg: "Question ID and answer are required" });
+  if (!answer || !questionid) {
+    return res.status(400).json({ msg: "Answer and question ID are required" });
   }
 
   try {
-    // Check if the question exists
-    const [questionRows] = await getConnection().query(
-      "SELECT * FROM question WHERE questionid = ?",
-      [questionid]
-    );
+    const answerId = `A${Date.now()}`;
+    const currentTimestamp = new Date();
 
-    if (questionRows.length === 0) {
-      return res.status(404).json({ msg: "Question not found" });
-    }
-
-    const answerId = `A${Date.now()}`; // Simple unique ID generation using current time
     const insertAnswerQuery = `
-      INSERT INTO answer (id, questionid, user_id, answer) 
-      VALUES (?, ?, ?, ?)`;
+      INSERT INTO answer (id, questionid, user_id, answer, created_at)
+      VALUES (?, ?, ?, ?, ?)`;
 
     await getConnection().query(insertAnswerQuery, [
       answerId,
       questionid,
       userId,
       answer,
+      currentTimestamp,
     ]);
 
-    res.status(201).json({ msg: "Answer posted successfully" });
+    res.status(201).json({
+      msg: "Answer posted successfully",
+      answerid: answerId,
+      created_at: currentTimestamp,
+    });
   } catch (error) {
     console.error("Error posting answer:", error.message);
-    res.status(500).json({ msg: "Server error", error: error.message }); // Include error message for debugging
+    res.status(500).json({
+      msg: "Server error",
+      error: error.message,
+    });
   }
 };
 
-// Get all answers for a specific question, including provider names
 const getAnswersForQuestion = async (req, res) => {
-  const { questionid } = req.params;
-
-  if (!questionid) {
-    return res.status(400).json({ msg: "Question ID is required" });
-  }
+  const questionId = req.params.questionid;
 
   try {
     const query = `
-      SELECT a.id, a.questionid, a.answer, a.user_id, u.firstname, u.lastname
-      FROM answer a
-      JOIN user u ON a.user_id = u.id
-      WHERE a.questionid = ?
+      SELECT answer.id, answer.answer, answer.created_at,
+             user.firstname, user.lastname
+      FROM answer
+      JOIN user ON answer.user_id = user.id
+      WHERE answer.questionid = ?
     `;
+    const [rows] = await getConnection().query(query, [questionId]);
 
-    const [rows] = await getConnection().query(query, [questionid]);
-
-    if (rows.length === 0) {
-      return res
-        .status(404)
-        .json({ msg: "No answers found for this question" });
-    }
-
-    res.status(200).json({ answers: rows });
+    res.status(200).json({
+      msg: "Answers fetched successfully",
+      answers: rows,
+    });
   } catch (error) {
-    console.error("Error retrieving answers:", error.message);
-    res.status(500).json({ msg: "Server error", error: error.message }); // Include error message for debugging
+    console.error("Error fetching answers:", error.message);
+    res.status(500).json({
+      msg: "Server error",
+      error: error.message,
+    });
   }
 };
 
-// Get a single answer by ID, including provider name
 const getAnswersSingleForQuestion = async (req, res) => {
-  const { answerid } = req.params;
-
-  if (!answerid) {
-    return res.status(400).json({ msg: "Answer ID is required" });
-  }
+  const answerId = req.params.answerid;
 
   try {
     const query = `
-      SELECT a.id, a.questionid, a.answer, a.user_id, u.firstname, u.lastname
-      FROM answer a
-      JOIN user u ON a.user_id = u.id
-      WHERE a.id = ?
+      SELECT answer.id, answer.answer, answer.created_at,
+             user.firstname, user.lastname
+      FROM answer
+      JOIN user ON answer.user_id = user.id
+      WHERE answer.id = ?
     `;
-
-    const [rows] = await getConnection().query(query, [answerid]);
+    const [rows] = await getConnection().query(query, [answerId]);
 
     if (rows.length === 0) {
-      return res.status(404).json({ msg: "No answers found with this ID" });
+      return res.status(404).json({
+        msg: "Answer not found",
+      });
     }
 
-    res.status(200).json({ answer: rows[0] });
+    res.status(200).json({
+      msg: "Answer fetched successfully",
+      answer: rows[0],
+    });
   } catch (error) {
-    console.error("Error retrieving answer:", error.message);
-    res.status(500).json({ msg: "Server error", error: error.message }); // Include error message for debugging
+    console.error("Error fetching answer:", error.message);
+    res.status(500).json({
+      msg: "Server error",
+      error: error.message,
+    });
   }
 };
 

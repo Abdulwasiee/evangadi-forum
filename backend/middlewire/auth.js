@@ -5,7 +5,6 @@ const JWT_SECRET = process.env.SECRET_KEY;
 
 const authMiddleware = (req, res, next) => {
   const authHeader = req.headers["authorization"];
-
   const token =
     authHeader && authHeader.startsWith("Bearer ")
       ? authHeader.split(" ")[1]
