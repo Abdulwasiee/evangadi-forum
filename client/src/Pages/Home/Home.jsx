@@ -50,7 +50,7 @@ function Home() {
     const checkUser = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        console.log("Token retrieved:", token); 
+    
         if (token) {
           const response = await axios.get(
             "http://localhost:2000/api/user/checkUser",
@@ -60,7 +60,7 @@ function Home() {
               },
             }
           );
-          console.log("User response:", response.data); 
+       
           setUserName(response.data.user.username);
         }
       } catch (err) {

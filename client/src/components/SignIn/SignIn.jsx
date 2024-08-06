@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../Auth/Auth"; // Adjust the path to your AuthContext file
+import { AuthContext } from "../Auth/Auth"; 
 import "./SignIn.css";
 
 const SignIn = () => {
-  const { login } = useContext(AuthContext); // Access login function from context
+  const { login } = useContext(AuthContext); 
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -31,19 +31,24 @@ const SignIn = () => {
 
       const result = await response.json();
 
+      console.log("Sign-in result:", result); // Log the entire result to check the token
+
       if (response.ok) {
-        await login(result.token);
-
-        setMessage(result.msg);
-        setError("");
-        setFormData({ username: "", password: "" });
-
-        navigate("/home");
+        if (result.token) {
+          await login(result.token); // This should store the token in localStorage
+          setMessage(result.msg);
+          setError("");
+          setFormData({ username: "", password: "" });
+          navigate("/home");
+        } else {
+          setError("Token not received.");
+        }
       } else {
         setError(result.message || "Sign-in failed.");
         setMessage("");
       }
     } catch (error) {
+      console.error("Error during sign-in:", error);
       setError("Error during sign-in. Please try again.");
       setMessage("");
     }

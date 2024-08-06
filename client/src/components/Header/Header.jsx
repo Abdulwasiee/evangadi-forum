@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../Auth/Auth"; // Adjust the path to your AuthContext file
 import logo from "../../assets/evangadi-logo-black.png";
@@ -6,6 +6,8 @@ import "./Header.css";
 
 const Header = () => {
   const { isAuthenticated, logout } = useContext(AuthContext);
+
+  useEffect(() => {}, [isAuthenticated]);
 
   return (
     <header className="header-container">
@@ -22,7 +24,9 @@ const Header = () => {
           </li>
           {isAuthenticated ? (
             <li>
-              <button onClick={logout}>Log Out</button>
+              <button className="logout-button" onClick={logout}>
+                Log Out
+              </button>
             </li>
           ) : (
             <li>

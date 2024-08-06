@@ -130,7 +130,10 @@ const AnswerPage = () => {
               <li key={answer.id} className="answer-item">
                 <FaUserCircle className="profile-icon" />
                 <div className="answer-details">
-                  <span className="answer-text">{answer.answer}</span>
+                  <span className="answer-text">
+                    &ldquo;{answer.answer}&rdquo;{" "}
+                    {/* Display answer in quotes */}
+                  </span>
                   <span className="answer-provider">
                     {answer.firstname} {answer.lastname}
                   </span>

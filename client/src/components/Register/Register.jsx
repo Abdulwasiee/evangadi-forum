@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../Auth/Auth"; // Ensure correct import path
 import "./register.css";
 
 const Register = () => {
+  const { login } = useContext(AuthContext); // Access login function from context
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -11,7 +13,6 @@ const Register = () => {
     firstname: "",
     lastname: "",
   });
-
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const Register = () => {
 
       // Store the new token
       localStorage.setItem("authToken", `Bearer ${response.data.token}`);
-
+      await login(response.data.token); // Update context with the new token
       setMessage(response.data.msg);
       setError("");
       setFormData({
@@ -61,7 +62,7 @@ const Register = () => {
 
   return (
     <div className="register-container">
-      <h2 className="register-title">Join the network</h2>
+      <h2 className="register-title">Join the Network</h2>
       <p>
         Already have an account? <Link to="/signIn">Sign In</Link>
       </p>
