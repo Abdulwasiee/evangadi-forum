@@ -19,8 +19,6 @@ function Home() {
         const response = await axios.get(
           "http://localhost:2000/api/question/get"
         );
-
-        // Sort questions by created_at timestamp in descending order
         const sortedQuestions = response.data.questions.sort(
           (a, b) => new Date(b.created_at) - new Date(a.created_at)
         );
@@ -52,15 +50,17 @@ function Home() {
     const checkUser = async () => {
       try {
         const token = localStorage.getItem("authToken");
+        console.log("Token retrieved:", token); 
         if (token) {
           const response = await axios.get(
             "http://localhost:2000/api/user/checkUser",
             {
               headers: {
-                Authorization: `${token}`,
+                Authorization: `${token}`, 
               },
             }
           );
+          console.log("User response:", response.data); 
           setUserName(response.data.user.username);
         }
       } catch (err) {

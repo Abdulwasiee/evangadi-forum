@@ -9,6 +9,7 @@ function QuestionPage() {
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(""); // Added success message state
 
   const handleAddTag = () => {
     if (tagInput && !tags.includes(tagInput)) {
@@ -17,48 +18,46 @@ function QuestionPage() {
     }
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      console.error("No authentication token found");
-      setError("No authentication token found.");
-      return;
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        setError("No authentication token found.");
+        return;
+      }
+
+      const response = await fetch("http://localhost:2000/api/question/post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`, // Added Bearer prefix
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          tags: tags.join(", "), // Changed to 'tags' for clarity
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setSuccess(result.msg || "Question posted successfully."); // Added success message
+        setTitle("");
+        setDescription("");
+        setTags([]);
+        setError("");
+      } else {
+        setError(result.msg || "Failed to post question.");
+        setSuccess("");
+      }
+    } catch (error) {
+      setError("Error posting question. Please try again.");
+      setSuccess("");
     }
-
-    console.log("Submitting question with token:", token);
-
-    const response = await fetch("http://localhost:2000/api/question/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${token}`, // Ensure only one "Bearer"
-      },
-      body: JSON.stringify({
-        title,
-        description,
-        tag: tags.join(", "),
-      }),
-    });
-
-    const result = await response.json();
-    if (response.ok) {
-      console.log("Question posted successfully:", result);
-      setTitle("");
-      setDescription("");
-      setTags([]);
-      setError("");
-    } else {
-      console.error("Failed to post question:", result.msg);
-      setError(result.msg || "Failed to post question.");
-    }
-  } catch (error) {
-    console.error("Error posting question:", error);
-    setError("Error posting question.");
-  }
-};
+  };
 
   return (
     <Layout>
@@ -91,12 +90,14 @@ const handleSubmit = async (e) => {
               placeholder="Question title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              required
             />
             <textarea
               className="question-details-textarea"
               placeholder="Question details..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              required
             ></textarea>
             <div className="tag-container">
               <input
@@ -126,6 +127,8 @@ const handleSubmit = async (e) => {
             </button>
           </form>
           {error && <p className="error-message">{error}</p>}
+          {success && <p className="success-message">{success}</p>}{" "}
+          {/* Display success message */}
         </div>
       </section>
     </Layout>

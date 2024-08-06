@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom";
 import "./register.css";
 
 const Register = () => {
@@ -14,7 +14,7 @@ const Register = () => {
 
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,8 +28,15 @@ const Register = () => {
         "http://localhost:2000/api/user/register",
         formData
       );
+
+      // Clear any existing token
+      localStorage.removeItem("authToken");
+
+      // Store the new token
+      localStorage.setItem("authToken", `Bearer ${response.data.token}`);
+
       setMessage(response.data.msg);
-      setError(""); 
+      setError("");
       setFormData({
         email: "",
         username: "",
@@ -38,9 +45,11 @@ const Register = () => {
         lastname: "",
       });
 
-      navigate("/home"); 
+      // Redirect to the home page after a short delay
+      setTimeout(() => {
+        navigate("/home");
+      }, 500);
     } catch (error) {
-  
       if (error.response) {
         setError(error.response.data.msg || "Please try again.");
       } else {

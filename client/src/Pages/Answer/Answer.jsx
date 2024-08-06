@@ -13,6 +13,7 @@ const AnswerPage = () => {
   const [error, setError] = useState(null);
   const [userName, setUserName] = useState("");
   const [question, setQuestion] = useState(null);
+  const [refresh, setRefresh] = useState(false); // State to trigger refresh
 
   // Fetch question and answers for the specific question
   useEffect(() => {
@@ -28,7 +29,6 @@ const AnswerPage = () => {
         }
 
         if (answersResponse.data.answers) {
-          // Sort answers to show the latest one on top
           const sortedAnswers = answersResponse.data.answers.sort(
             (a, b) => new Date(b.created_at) - new Date(a.created_at)
           );
@@ -45,7 +45,7 @@ const AnswerPage = () => {
     };
 
     fetchData();
-  }, [questionId]);
+  }, [questionId, refresh]); // Add `refresh` to dependencies
 
   // Check if user is authenticated and get username
   useEffect(() => {
@@ -57,7 +57,7 @@ const AnswerPage = () => {
             "http://localhost:2000/api/user/checkUser",
             {
               headers: {
-                Authorization: `${token}`,
+                Authorization: `${token}`, // Added Bearer prefix
               },
             }
           );
@@ -87,26 +87,12 @@ const AnswerPage = () => {
           { questionid: questionId, answer: newAnswer },
           {
             headers: {
-              Authorization: `${token}`,
+              Authorization: `${token}`, // Added Bearer prefix
             },
           }
         );
         setNewAnswer("");
-        // Refresh the answers after posting a new one
-        const fetchAnswersResponse = await axios.get(
-          `http://localhost:2000/api/answer/${questionId}`
-        );
-        if (fetchAnswersResponse.data.answers) {
-          const sortedAnswers = fetchAnswersResponse.data.answers.sort(
-            (a, b) => new Date(b.created_at) - new Date(a.created_at)
-          );
-          setAnswers(sortedAnswers);
-          setError(null);
-        } else {
-          setError(
-            fetchAnswersResponse.data.msg || "Unexpected response format"
-          );
-        }
+        setRefresh((prev) => !prev);
       }
     } catch (err) {
       const errorMsg = err.response?.data?.msg || "Failed to post answer";
