@@ -4,16 +4,38 @@ import Home from "./Pages/Home/Home";
 import QuestionPage from "./Pages/Question/QuestionPage";
 import Landing from "./Pages/Landing/Landing";
 import AnswerPage from "./Pages/Answer/Answer";
+import Protect from "./components/Protection/Protect";
 
 function Router() {
   return (
     <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/home/postQuestion" element={<QuestionPage />} />
+      <Route
+        path="/home"
+        element={
+          <Protect>
+            {" "}
+            <Home />
+          </Protect>
+        }
+      />
+      <Route
+        path="/home/postQuestion"
+        element={
+          <Protect>
+            {" "}
+            <QuestionPage />
+          </Protect>
+        }
+      />
+
       <Route
         path="/home/question/:questionId/answers"
-        element={<AnswerPage />}
+        element={
+          <Protect>
+            {" "}
+            <AnswerPage />
+          </Protect>
+        }
       />
       <Route path="*" element={<Landing />} />
     </Routes>

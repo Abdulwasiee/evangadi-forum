@@ -9,8 +9,9 @@ function QuestionPage() {
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(""); // Added success message state
+  const [success, setSuccess] = useState("");
 
+  // Function to add a tag
   const handleAddTag = () => {
     if (tagInput && !tags.includes(tagInput)) {
       setTags([...tags, tagInput]);
@@ -18,6 +19,7 @@ function QuestionPage() {
     }
   };
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -32,19 +34,19 @@ function QuestionPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `${token}`, // Added Bearer prefix
+          Authorization: `${token}`,
         },
         body: JSON.stringify({
           title,
           description,
-          tags: tags.join(", "), // Changed to 'tags' for clarity
+          tags:tags, // Send tags as an array
         }),
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        setSuccess(result.msg || "Question posted successfully."); // Added success message
+        setSuccess(result.msg || "Question posted successfully.");
         setTitle("");
         setDescription("");
         setTags([]);
@@ -127,8 +129,7 @@ function QuestionPage() {
             </button>
           </form>
           {error && <p className="error-message">{error}</p>}
-          {success && <p className="success-message">{success}</p>}{" "}
-          {/* Display success message */}
+          {success && <p className="success-message">{success}</p>}
         </div>
       </section>
     </Layout>
