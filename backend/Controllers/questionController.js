@@ -1,7 +1,7 @@
 const { getConnection } = require("../dataBase/dataBase");
 
 const postQuestion = async (req, res) => {
-  const { description, title, tag } = req.body;
+  const { description, title, tags } = req.body;
   const userId = req.user.id;
 
   if (!description || !title) {
@@ -20,7 +20,7 @@ const postQuestion = async (req, res) => {
       questionId,
       title,
       description,
-      tag || null,
+      tags || null,
       userId,
       currentTimestamp,
     ]);
