@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Auth/Auth"; // Ensure correct import path
 import "./register.css";
 import { axiosInstance } from "../../utility/axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import icons for toggling
 
 const Register = () => {
   const { login } = useContext(AuthContext); // Access login function from context
@@ -16,6 +17,7 @@ const Register = () => {
   });
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,10 +28,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post(
-        "/api/user/register",
-        formData
-      );
+      const response = await axiosInstance.post("/api/user/register", formData);
 
       // Clear any existing token
       localStorage.removeItem("authToken");
@@ -59,6 +58,10 @@ const Register = () => {
       }
       setMessage("");
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -114,9 +117,9 @@ const Register = () => {
             required
           />
         </div>
-        <div className="form-input">
+        <div className="form-input password-input">
           <input
-            type="password"
+            type={showPassword ? "text" : "password"} // Toggle password visibility
             id="password"
             name="password"
             placeholder="Enter your password"
@@ -124,6 +127,13 @@ const Register = () => {
             onChange={handleChange}
             required
           />
+          <button
+            type="button"
+            className="password-toggle"
+            onClick={togglePasswordVisibility}
+          >
+            {showPassword ? <FaEye /> : <FaEyeSlash />} {/* Toggle icon */}
+          </button>
         </div>
 
         <button type="submit" className="register-button">
