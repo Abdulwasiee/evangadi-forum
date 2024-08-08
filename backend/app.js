@@ -24,7 +24,7 @@ app.use("/api/user", userRouter);
 app.use("/api/question", questionRouter);
 app.use("/api/answer", answerRouter);
 
-const port = 2000;
+const port =process.env.PORT;
 
 const start = async () => {
   try {
