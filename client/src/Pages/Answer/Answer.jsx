@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { formatDistanceToNow } from "date-fns";
 import "./Answer.css";
 import Layout from "../../components/Layout/Layout";
+import { axiosInstance } from "../../utility/axios";
 
 const AnswerPage = () => {
   const { questionId } = useParams();
@@ -20,8 +20,8 @@ const AnswerPage = () => {
     const fetchData = async () => {
       try {
         const [questionResponse, answersResponse] = await Promise.all([
-          axios.get(`http://localhost:2000/api/question/${questionId}`),
-          axios.get(`http://localhost:2000/api/answer/${questionId}`),
+          axiosInstance.get(`/api/question/${questionId}`),
+          axiosInstance.get(`/api/answer/${questionId}`),
         ]);
 
         if (questionResponse.data.question) {
@@ -53,14 +53,11 @@ const AnswerPage = () => {
       try {
         const token = localStorage.getItem("authToken");
         if (token) {
-          const response = await axios.get(
-            "http://localhost:2000/api/user/checkUser",
-            {
-              headers: {
-                Authorization: `${token}`, // Added Bearer prefix
-              },
-            }
-          );
+          const response = await axiosInstance.get("/api/user/checkUser", {
+            headers: {
+              Authorization: `${token}`, // Added Bearer prefix
+            },
+          });
           setUserName(response.data.user.username);
         }
       } catch (err) {
@@ -82,8 +79,8 @@ const AnswerPage = () => {
     try {
       const token = localStorage.getItem("authToken");
       if (token) {
-        await axios.post(
-          "http://localhost:2000/api/answer",
+        await axiosInstance.post(
+          "/api/answer",
           { questionid: questionId, answer: newAnswer },
           {
             headers: {

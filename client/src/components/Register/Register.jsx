@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Auth/Auth"; // Ensure correct import path
 import "./register.css";
+import { axiosInstance } from "../../utility/axios";
 
 const Register = () => {
   const { login } = useContext(AuthContext); // Access login function from context
@@ -25,8 +26,8 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:2000/api/user/register",
+      const response = await axiosInstance.post(
+        "/api/user/register",
         formData
       );
 

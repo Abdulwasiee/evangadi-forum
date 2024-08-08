@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import axios from "axios";
+import { axiosInstance }from '../../utility/axios'
 import Question from "../../components/QuestionList/Question";
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
@@ -16,8 +17,8 @@ function Home() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:2000/api/question/get"
+        const response = await axiosInstance.get(
+          "/api/question/get"
         );
         const sortedQuestions = response.data.questions.sort(
           (a, b) => new Date(b.created_at) - new Date(a.created_at)
@@ -52,8 +53,8 @@ function Home() {
         const token = localStorage.getItem("authToken");
     
         if (token) {
-          const response = await axios.get(
-            "http://localhost:2000/api/user/checkUser",
+          const response = await axiosInstance.get(
+            "/api/user/checkUser",
             {
               headers: {
                 Authorization: `${token}`, 

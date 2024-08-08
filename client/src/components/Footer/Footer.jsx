@@ -33,7 +33,7 @@ function Footer() {
           <div className="section-title">Useful Links</div>
           <ul>
             <li>
-              <a href="/how-it-works">How it Works</a>
+              <a href="/">How it Works</a>
             </li>
             <li>
               <a href="/terms">Terms of Service</a>

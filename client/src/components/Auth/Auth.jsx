@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import { axiosInstance } from "../../utility/axios";
 
 export const AuthContext = createContext();
 
@@ -13,15 +14,17 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      const response = await fetch("http://localhost:2000/api/user/checkUser", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      });
+      const response = await axiosInstance.get(
+        "/api/user/checkUser",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
 
-      setIsAuthenticated(response.ok);
+      setIsAuthenticated(response.status === 200);
     } catch (error) {
       console.error("Error checking authentication status:", error);
       setIsAuthenticated(false);
@@ -29,12 +32,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    checkAuthStatus(); 
-  }, []); 
+    checkAuthStatus();
+  }, []);
 
   const login = async (token) => {
     localStorage.setItem("authToken", `Bearer ${token}`);
-    await checkAuthStatus(); 
+    await checkAuthStatus();
   };
 
   const logout = () => {

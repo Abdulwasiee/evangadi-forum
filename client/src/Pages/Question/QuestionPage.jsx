@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import { FaArrowRight } from "react-icons/fa";
+
 import "./Question.css";
+import { axiosInstance } from "../../utility/axios";
 
 function QuestionPage() {
   const [title, setTitle] = useState("");
@@ -30,32 +32,31 @@ function QuestionPage() {
         return;
       }
 
-      const response = await fetch("http://localhost:2000/api/question/post", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-        body: JSON.stringify({
+      const response = await axiosInstance.post(
+        "/api/question/post",
+        {
           title,
           description,
-          tags:tags, // Send tags as an array
-        }),
-      });
+          tags: tags.length ? tags : null, // Send tags as an array
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`, // Ensure Bearer token format
+          },
+        }
+      );
 
-      const result = await response.json();
+      // Axios response does not require .json() method
+      const result = response.data;
 
-      if (response.ok) {
-        setSuccess(result.msg || "Question posted successfully.");
-        setTitle("");
-        setDescription("");
-        setTags([]);
-        setError("");
-      } else {
-        setError(result.msg || "Failed to post question.");
-        setSuccess("");
-      }
+      setSuccess(result.msg || "Question posted successfully.");
+      setTitle("");
+      setDescription("");
+      setTags([]);
+      setError("");
     } catch (error) {
+      console.error("Error posting question:", error);
       setError("Error posting question. Please try again.");
       setSuccess("");
     }
@@ -107,7 +108,7 @@ function QuestionPage() {
                 className="tag-input"
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
-                placeholder="Add a tag"
+                placeholder="Add a tag (optional)"
               />
               <button
                 className="add-tag-button"

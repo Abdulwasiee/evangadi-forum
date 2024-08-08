@@ -20,7 +20,7 @@ const Header = () => {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/how-it-works">How it Works</Link>
+            <Link to="/">How it Works</Link>
           </li>
           {isAuthenticated ? (
             <li>

@@ -1,11 +1,12 @@
 import React, { useState, useContext } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../Auth/Auth"; 
+import { AuthContext } from "../Auth/Auth";
+import { axiosInstance } from "../../utility/axios"; 
 import "./SignIn.css";
 
 const SignIn = () => {
-  const { login } = useContext(AuthContext); 
+  const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -23,20 +24,18 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:2000/api/user/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+      const response = await axiosInstance.post("/api/user/signin", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
-      const result = await response.json();
+     
 
-      console.log("Sign-in result:", result); // Log the entire result to check the token
-
-      if (response.ok) {
-        if (result.token) {
-          await login(result.token); // This should store the token in localStorage
-          setMessage(result.msg);
+      if (response.status === 200) {
+        if (response.data.token) {
+          await login(response.data.token); 
+          setMessage(response.data.msg);
           setError("");
           setFormData({ username: "", password: "" });
           navigate("/home");
@@ -44,7 +43,7 @@ const SignIn = () => {
           setError("Token not received.");
         }
       } else {
-        setError(result.message || "Sign-in failed.");
+        setError(response.data.message || "Sign-in failed.");
         setMessage("");
       }
     } catch (error) {
