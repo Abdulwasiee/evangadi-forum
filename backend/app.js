@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allow PUT and DELETE methods
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
@@ -24,7 +24,7 @@ app.use("/api/user", userRouter);
 app.use("/api/question", questionRouter);
 app.use("/api/answer", answerRouter);
 
-const port =process.env.PORT;
+const port = process.env.PORT;
 
 const start = async () => {
   try {

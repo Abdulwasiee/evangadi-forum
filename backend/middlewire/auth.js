@@ -4,6 +4,9 @@ require("dotenv").config();
 const JWT_SECRET = process.env.SECRET_KEY;
 
 const authMiddleware = (req, res, next) => {
+
+
+
   const authHeader = req.headers["authorization"];
   const token =
     authHeader && authHeader.startsWith("Bearer ")
@@ -16,12 +19,14 @@ const authMiddleware = (req, res, next) => {
   }
 
   try {
+    // Verify the token using the secret key
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded;
-    next();
+    req.user = decoded; // Attach decoded user data to request
+    next(); 
   } catch (err) {
+ 
     console.error("Token verification error:", err.message);
-    res.status(401).json({ msg: "Invalid token" });
+    res.status(401).json({ msg: "Invalid token", error: err.message });
   }
 };
 
