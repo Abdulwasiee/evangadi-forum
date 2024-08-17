@@ -50,6 +50,73 @@
   font-size: 16px;
   color: #333;
 }
+/* Container for the confirmation dialog */
+.confirmation-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it appears above other content */
+}
+
+/* Content of the confirmation dialog */
+.confirmation-dialog-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Title of the confirmation dialog */
+.confirmation-dialog-content h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+/* Paragraph inside the confirmation dialog */
+.confirmation-dialog-content p {
+  margin: 15px 0;
+  color: #555;
+}
+
+/* Buttons inside the confirmation dialog */
+.confirmation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Space between buttons */
+}
+
+.confirm-button,
+.cancel-button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-button:hover {
+  background: #0056b3;
+}
+
+.cancel-button {
+  background: #f44336; /* Red color for cancel button */
+}
+
+.cancel-button:hover {
+  background: #d32f2f;
+}
 
 .error-message {
   color: red;

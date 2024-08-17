@@ -14,6 +14,8 @@ function Home() {
   const [userName, setUserName] = useState("");
   const [userId, setUserId] = useState(""); // Track the current user's ID
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Track authentication status
+  const [confirmDelete, setConfirmDelete] = useState(false); // State to show confirmation dialog
+  const [questionToDelete, setQuestionToDelete] = useState(null); // Question ID to be deleted
 
   const navigate = useNavigate();
 
@@ -83,15 +85,12 @@ function Home() {
     navigate(`/editQuestion/${questionId}`);
   };
 
-  const handleDelete = async (questionId) => {
-    // Show a confirmation dialog
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this question?"
-    );
-    if (!confirmed) {
-      return; // Exit if the user cancels
-    }
+  const handleDelete = (questionId) => {
+    setQuestionToDelete(questionId);
+    setConfirmDelete(true); // Show confirmation dialog
+  };
 
+  const confirmDeleteAction = async () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("No authentication token found");
@@ -99,21 +98,28 @@ function Home() {
     }
 
     try {
-      await axiosInstance.delete(`/api/question/${questionId}`, {
+      await axiosInstance.delete(`/api/question/${questionToDelete}`, {
         headers: {
           Authorization: `${token}`,
         },
       });
 
       // Remove the deleted question from the state
-      setQuestions(questions.filter((q) => q.questionid !== questionId));
+      setQuestions(questions.filter((q) => q.questionid !== questionToDelete));
       setFilteredQuestions(
-        filteredQuestions.filter((q) => q.questionid !== questionId)
+        filteredQuestions.filter((q) => q.questionid !== questionToDelete)
       );
+      setConfirmDelete(false); // Hide confirmation dialog
+      setQuestionToDelete(null); // Reset question to delete
     } catch (err) {
       console.error("Error deleting question:", err);
       setError("Failed to delete question");
     }
+  };
+
+  const cancelDeleteAction = () => {
+    setConfirmDelete(false); // Hide confirmation dialog
+    setQuestionToDelete(null); // Reset question to delete
   };
 
   return (
@@ -148,13 +154,6 @@ function Home() {
               <div className="action-buttons">
                 {isAuthenticated && (
                   <>
-                    {/* Debugging log */}
-                    {console.log(
-                      "Current user ID:",
-                      userId,
-                      "Question user ID:",
-                      question.user_id
-                    )}
                     {userId === question.user_id && ( // Check if user is authenticated and is the owner of the question
                       <>
                         <FaEdit
@@ -173,6 +172,26 @@ function Home() {
             </li>
           ))}
         </ul>
+
+        {confirmDelete && (
+          <div className="confirmation-dialog">
+            <div className="confirmation-dialog-content">
+              <h3>Confirm Deletion</h3>
+              <p>Are you sure you want to delete this question?</p>
+              <div className="confirmation-buttons">
+                <button
+                  className="confirm-button"
+                  onClick={confirmDeleteAction}
+                >
+                  Confirm
+                </button>
+                <button className="cancel-button" onClick={cancelDeleteAction}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </Layout>
   );

@@ -1,3 +1,5 @@
+/* AnswerPage.css */
+
 .answer-page {
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -50,7 +52,7 @@
   border-radius: 5px;
   background-color: #f9f9f9;
   width: 100%;
-  position: relative; /* Add relative positioning for absolute children */
+  position: relative;
 }
 
 .question-title {
@@ -91,34 +93,57 @@
 }
 
 .answer-actions {
-  position: absolute; /* Position actions absolutely */
-  right: 10px; /* Adjust distance from right edge */
+  position: absolute;
+  right: 10px;
   top: 50%;
-  transform: translateY(-50%); /* Center vertically */
+  transform: translateY(-50%);
+}
+
+.edit-link,
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.edit-link:hover,
+.delete-button:hover {
+  opacity: 0.8;
+}
+
+.edit-icon,
+.delete-icon {
+  font-size: 20px;
+  color: #007bff;
+}
+
+.delete-button {
+  color: #d9534f;
 }
 
 .answer-form {
-  width: 90%;
-  margin: 40px auto;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .answer-form textarea {
   width: 100%;
-  height: 120px;
-  padding: 12px;
-  margin-bottom: 15px;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ddd;
   border-radius: 5px;
-  border: 1px solid #ccc;
   font-size: 16px;
-  resize: vertical;
+  margin-bottom: 10px;
 }
 
 .answer-form button {
-  padding: 12px 25px;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   background-color: #007bff;
-  color: white;
+  color: #fff;
   font-size: 16px;
   cursor: pointer;
 }
@@ -127,20 +152,65 @@
   background-color: #0056b3;
 }
 
-/* EditAnswer.css */
-.edit-link {
-  color: #007bff;
-  text-decoration: none;
-  font-size: 0.9rem;
+/* Confirmation Dialog */
+.confirmation-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-.edit-link:hover {
-  text-decoration: underline;
+.confirmation-dialog-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
-.edit-icon {
-  font-size: 18px;
-  margin-left: 5px; /* Space between icon and text */
+.confirmation-dialog-content h3 {
+  margin-bottom: 15px;
+}
+
+.confirmation-dialog-content p {
+  margin-bottom: 20px;
+}
+
+.confirmation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.confirm-button,
+.cancel-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.confirm-button {
+  background-color: #d9534f;
+  color: #fff;
+}
+
+.cancel-button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.confirm-button:hover {
+  background-color: #c9302c;
+}
+
+.cancel-button:hover {
+  background-color: #0056b3;
 }

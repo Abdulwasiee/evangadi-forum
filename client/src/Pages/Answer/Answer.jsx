@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { FaUserCircle, FaEdit } from "react-icons/fa";
+import { FaUserCircle, FaEdit, FaTrash } from "react-icons/fa";
 import { formatDistanceToNow } from "date-fns";
 import "./Answer.css";
 import Layout from "../../components/Layout/Layout";
@@ -13,9 +13,9 @@ const AnswerPage = () => {
   const [error, setError] = useState(null);
   const [userName, setUserName] = useState("");
   const [question, setQuestion] = useState(null);
-  const [refresh, setRefresh] = useState(false); // State to trigger refresh
+  const [refresh, setRefresh] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(null);
 
-  // Fetch question and answers for the specific question
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,9 +45,8 @@ const AnswerPage = () => {
     };
 
     fetchData();
-  }, [questionId, refresh]); // Add `refresh` to dependencies
+  }, [questionId, refresh]);
 
-  // Check if user is authenticated and get username
   useEffect(() => {
     const checkUser = async () => {
       try {
@@ -68,12 +67,10 @@ const AnswerPage = () => {
     checkUser();
   }, []);
 
-  // Handle change in the answer input field
   const handleAnswerChange = (event) => {
     setNewAnswer(event.target.value);
   };
 
-  // Handle form submission to post a new answer
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -89,7 +86,7 @@ const AnswerPage = () => {
           }
         );
         setNewAnswer("");
-        setRefresh((prev) => !prev); // Trigger refresh after submission
+        setRefresh((prev) => !prev);
       }
     } catch (err) {
       const errorMsg = err.response?.data?.msg || "Failed to post answer";
@@ -98,7 +95,33 @@ const AnswerPage = () => {
     }
   };
 
-  // Calculate time ago only if question is set
+  const handleDelete = (answerId) => {
+    setConfirmDelete(answerId);
+  };
+
+  const confirmDeleteAnswer = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (token && confirmDelete) {
+        await axiosInstance.delete(`/api/answer/${confirmDelete}`, {
+          headers: {
+            Authorization: `${token}`, // Added Bearer prefix
+          },
+        });
+        setConfirmDelete(null); // Reset confirmation
+        setRefresh((prev) => !prev);
+      }
+    } catch (err) {
+      const errorMsg = err.response?.data?.msg || "Failed to delete answer";
+      setError(errorMsg);
+      console.error("Error deleting answer:", err);
+    }
+  };
+
+  const cancelDelete = () => {
+    setConfirmDelete(null);
+  };
+
   const timeAgo = question
     ? formatDistanceToNow(new Date(question.created_at), { addSuffix: true })
     : "";
@@ -128,8 +151,7 @@ const AnswerPage = () => {
                 <FaUserCircle className="profile-icon" />
                 <div className="answer-details">
                   <span className="answer-text">
-                    &ldquo;{answer.answer}&rdquo;{" "}
-                    {/* Display answer in quotes */}
+                    &ldquo;{answer.answer}&rdquo;
                   </span>
                   <span className="answer-provider">
                     {answer.firstname} {answer.lastname}
@@ -142,7 +164,12 @@ const AnswerPage = () => {
                       >
                         <FaEdit className="edit-icon" />
                       </Link>
-                      {/* Add other actions like delete if needed */}
+                      <button
+                        onClick={() => handleDelete(answer.id)}
+                        className="delete-button"
+                      >
+                        <FaTrash className="delete-icon" />
+                      </button>
                     </div>
                   )}
                 </div>
@@ -162,6 +189,25 @@ const AnswerPage = () => {
             />
             <button type="submit">Submit Answer</button>
           </form>
+        )}
+        {confirmDelete && (
+          <div className="confirmation-dialog">
+            <div className="confirmation-dialog-content">
+              <h3>Confirm Delete</h3>
+              <p>Are you sure you want to delete this answer?</p>
+              <div className="confirmation-buttons">
+                <button
+                  onClick={confirmDeleteAnswer}
+                  className="confirm-button"
+                >
+                  Yes
+                </button>
+                <button onClick={cancelDelete} className="cancel-button">
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </Layout>
