@@ -5,6 +5,7 @@ import QuestionPage from "./Pages/Question/QuestionPage";
 import Landing from "./Pages/Landing/Landing";
 import AnswerPage from "./Pages/Answer/Answer";
 import Protect from "./components/Protection/Protect";
+import EditQuestion from "./Pages/EditQuestion/EditQuestion";
 
 function Router() {
   return (
@@ -13,26 +14,30 @@ function Router() {
         path="/home"
         element={
           <Protect>
-            {" "}
             <Home />
           </Protect>
         }
       />
       <Route
-        path="/home/postQuestion"
+        path="/editQuestion/:questionId" // Updated path to match Home component's usage
         element={
           <Protect>
-            {" "}
+            <EditQuestion />
+          </Protect>
+        }
+      />
+      <Route
+        path="/postQuestion"
+        element={
+          <Protect>
             <QuestionPage />
           </Protect>
         }
       />
-
       <Route
-        path="/home/question/:questionId/answers"
+        path="/question/:questionId/answers"
         element={
           <Protect>
-            {" "}
             <AnswerPage />
           </Protect>
         }

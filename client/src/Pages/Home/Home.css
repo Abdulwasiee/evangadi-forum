@@ -11,6 +11,9 @@
   margin-bottom: 20px;
   position: sticky;
   top: 0;
+  background-color: #fff; /* Ensures header stands out against the content */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for the header */
+  z-index: 1000; /* Keeps header above other content */
 }
 
 .ask {
@@ -51,6 +54,7 @@
 .error-message {
   color: red;
   margin-top: 10px;
+  text-align: center; /* Center error messages for better visibility */
 }
 
 .questions-list {
@@ -94,4 +98,41 @@
   transform: translateY(-50%);
   font-size: 18px;
   color: #007bff;
+}
+
+.question-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.question-item:last-child {
+  border-bottom: none; /* Remove border for the last item */
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.edit-icon, .delete-icon {
+  font-size: 18px;
+  color: #007bff;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.edit-icon:hover {
+  color: #0056b3;
+}
+
+.delete-icon:hover {
+  color: #ff4d4d; /* Red color for delete */
 }

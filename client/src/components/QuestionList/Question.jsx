@@ -22,7 +22,7 @@ const Question = ({ question }) => {
       <div className="question-content">
         <p className="question-description">{description}?</p>
         <Link
-          to={`/home/question/${questionid}/answers`}
+          to={`/question/${questionid}/answers`}
           className="view-answers-link"
         >
           View Answers
