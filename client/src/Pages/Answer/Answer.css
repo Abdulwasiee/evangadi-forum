@@ -1,5 +1,3 @@
-/* Answer.css */
-
 .answer-page {
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -52,19 +50,23 @@
   border-radius: 5px;
   background-color: #f9f9f9;
   width: 100%;
-
+  position: relative; /* Add relative positioning for absolute children */
 }
+
 .question-title {
   font-style: italic;
   font-size: medium;
 }
-.question-Container {
+
+.question-container {
   margin: 30px;
 }
+
 .from-community {
   text-align: center;
   margin: 20px;
 }
+
 .profile-icon {
   font-size: 40px;
   margin-right: 15px;
@@ -74,6 +76,7 @@
 .answer-details {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .answer-text {
@@ -87,10 +90,16 @@
   color: #0b7d7e;
 }
 
-.answer-form {
+.answer-actions {
+  position: absolute; /* Position actions absolutely */
+  right: 10px; /* Adjust distance from right edge */
+  top: 50%;
+  transform: translateY(-50%); /* Center vertically */
+}
 
+.answer-form {
   width: 90%;
-  margin:40px auto;
+  margin: 40px auto;
 }
 
 .answer-form textarea {
@@ -116,4 +125,22 @@
 
 .answer-form button:hover {
   background-color: #0056b3;
+}
+
+/* EditAnswer.css */
+.edit-link {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+}
+
+.edit-link:hover {
+  text-decoration: underline;
+}
+
+.edit-icon {
+  font-size: 18px;
+  margin-left: 5px; /* Space between icon and text */
 }

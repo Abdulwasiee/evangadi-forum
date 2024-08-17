@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa";
+import { useParams, Link } from "react-router-dom";
+import { FaUserCircle, FaEdit } from "react-icons/fa";
 import { formatDistanceToNow } from "date-fns";
 import "./Answer.css";
 import Layout from "../../components/Layout/Layout";
@@ -89,7 +89,7 @@ const AnswerPage = () => {
           }
         );
         setNewAnswer("");
-        setRefresh((prev) => !prev);
+        setRefresh((prev) => !prev); // Trigger refresh after submission
       }
     } catch (err) {
       const errorMsg = err.response?.data?.msg || "Failed to post answer";
@@ -106,7 +106,7 @@ const AnswerPage = () => {
   return (
     <Layout>
       <div className="answer-page">
-        <div className="question-Container">
+        <div className="question-container">
           <h1>Question</h1>
           {question ? (
             <>
@@ -134,6 +134,17 @@ const AnswerPage = () => {
                   <span className="answer-provider">
                     {answer.firstname} {answer.lastname}
                   </span>
+                  {userName === answer.username && (
+                    <div className="answer-actions">
+                      <Link
+                        to={`/edit-answer/${answer.id}/${questionId}`}
+                        className="edit-link"
+                      >
+                        <FaEdit className="edit-icon" />
+                      </Link>
+                      {/* Add other actions like delete if needed */}
+                    </div>
+                  )}
                 </div>
               </li>
             ))

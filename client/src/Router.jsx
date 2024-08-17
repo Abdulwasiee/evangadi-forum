@@ -6,6 +6,7 @@ import Landing from "./Pages/Landing/Landing";
 import AnswerPage from "./Pages/Answer/Answer";
 import Protect from "./components/Protection/Protect";
 import EditQuestion from "./Pages/EditQuestion/EditQuestion";
+import EditAnswerPage from './Pages/Answer/EditAnswer';
 
 function Router() {
   return (
@@ -23,6 +24,14 @@ function Router() {
         element={
           <Protect>
             <EditQuestion />
+          </Protect>
+        }
+      />
+      <Route
+        path="/edit-answer/:answerId/:questionId" 
+        element={
+          <Protect>
+            <EditAnswerPage />
           </Protect>
         }
       />
